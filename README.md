@@ -21,3 +21,13 @@ react-native run-andriod (For Android)
 
 ## App : Dark Themed
 ![App Home](images/appLook1.png)
+
+
+## To Do:
+- [x] Finish HomeScreen (CryptoList View)
+- [x] Add Navigation
+- [x] Add Crypto Detailed Screen (CryptoItem View)
+- [ ] Finish Crypto Detailed Screen (CryptoItem View)
+- [ ] Add Favourite Crypto Screen (CryptoFav View)
+- [ ] Finish Favourite Crypto Screen (CryptoFav View)
+- [ ] Finish search feature (CryptoList View)
