@@ -5,6 +5,7 @@ import {
   Image,
   Button,
   FlatList,
+  TouchableOpacity,
   ActivityIndicator,
   AsyncStorage,
  } from 'react-native';
@@ -156,6 +157,34 @@ class CryptoItem extends Component {
    title: 'Info'
  }
 
+ _asyncStorageFunction = () => {
+   return () => {
+      alert('Fav btn clicked')
+   }
+
+   // favoriteHandler = async (id) => {
+   //   let idArray;
+   //   let savedText = 'Saved your favorite';
+   //   let favorites = this.state.favoriteCoins;
+   //   console.warn(favorites);
+   //   try {
+   //     if(favorites.includes(id)) {
+   //       idArray = favorites.filter((id2) => id2 !== id)
+   //       savedText = 'removed from you favorites';
+   //     }else {
+   //       idArray = [...favorites, id];
+   //     }
+   //     this.setState({favoriteCoins: idArray})
+   //     await AsyncStorage.setItem(FAVORITEDBKEY, JSON.stringify(idArray));
+   //     alert(savedText);
+   //   } catch (error) {
+   //     // Error saving data
+   //   }
+   // }
+
+   /*#have function to set cryptoObj to AsyncStorage after it checks if the button says 'add to favourite' or 'remove from favourite'*/
+ }
+
  render() {
    const cryptoObj = this.props.navigation.getParam('cryptoObj')
    const cryptoImg =  this.props.navigation.getParam('cryptoImg')
@@ -172,6 +201,11 @@ class CryptoItem extends Component {
            <Text style={styles.valuesContainer__values}>Change (24h): {cryptoObj.quotes.USD.percent_change_24h}%</Text>
            <Text style={styles.valuesContainer__values}>Change (7d): {cryptoObj.quotes.USD.percent_change_7d}%</Text>
          </View>
+
+         <TouchableOpacity
+          onPress={this._asyncStorageFunction()}>
+         <View style={styles.favoriteButton}><Text style={styles.favoriteButton__text}>Favorite</Text></View>
+         </TouchableOpacity>
        </View>
      </View>
    )
@@ -331,4 +365,17 @@ const styles = {
    color: 'white',
    marginTop: 5,
  },
+ favoriteButton: {
+   marginTop: 25,
+   padding: 15,
+   borderWidth: 1,
+   borderColor: 'white',
+   borderRadius: 25,
+ },
+ favoriteButton__text: {
+   color: 'white',
+   fontSize: 18,
+   paddingLeft: 5,
+   paddingRight: 5,
+ }
 }
