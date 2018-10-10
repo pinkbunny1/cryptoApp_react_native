@@ -5,7 +5,7 @@
 
 ## Instruction to run
 ```bash
-clone https://github.com/pinkbunny1/crypto_react_native_app.git
+clone https://github.com/pinkbunny1/cryptoApp_react_native.git
 cd crypto_react_native_app
 npm install
 react-native run-ios (For IOS)
