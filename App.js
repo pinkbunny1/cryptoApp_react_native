@@ -90,7 +90,6 @@ class CryptoFavList extends Component {
     const favoritedCoinsJson = await AsyncStorage.getItem(FAVORITEDBKEY);
     const favoriteData = await JSON.parse(favoritedCoinsJson);
     await this.setState({favCryptoList: favoriteData });
-    console.warn(this.state.favCryptoList)
   }
 
 
