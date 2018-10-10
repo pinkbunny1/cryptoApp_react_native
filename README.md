@@ -13,3 +13,8 @@ react-native run-andriod (For Android)
 ```
 ## Trouble Shooting
 - Bundling Error : `react-native start --reset-cache`
+
+
+## Take the `package.json` to update the dependencies and work on `App.js`
+- CryptoItem : Shows the detailed view of cruptocurrency. it has `cryptoObj` so no need to call API
+- CryptoList : Shows LIST view of all cryptos
