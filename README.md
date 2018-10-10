@@ -27,6 +27,7 @@ react-native run-andriod (For Android)
 - [x] Finish HomeScreen (CryptoList View)
 - [x] Add Navigation
 - [x] Add Crypto Detailed Screen (CryptoItem View)
+- [ ] Add Shake Feature (CryptoList View)
 - [ ] Finish Crypto Detailed Screen (CryptoItem View)
 - [ ] Add Favourite Crypto Screen (CryptoFav View)
 - [ ] Finish Favourite Crypto Screen (CryptoFav View)
