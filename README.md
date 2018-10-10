@@ -11,6 +11,8 @@ npm install
 react-native run-ios (For IOS)
 react-native run-andriod (For Android)
 ```
+
+
 ## Trouble Shooting
 - Bundling Error : `react-native start --reset-cache`
 
@@ -18,6 +20,7 @@ react-native run-andriod (For Android)
 ## Take the `package.json` to update the dependencies and work on `App.js`
 - CryptoItem : Shows the detailed view of cryptocurrency. it has `cryptoObj` so no need to call API
 - CryptoList : Shows LIST view of all cryptos
+
 
 ## App : Dark Themed
 <img src="images/appLook1.png" alt="HomeScreen" width="300">
@@ -31,5 +34,5 @@ react-native run-andriod (For Android)
 - [ ] Add Shake Feature (CryptoList View)
 - [ ] Finish Crypto Detailed Screen (CryptoItem View)
 - [ ] Add Favourite Crypto Screen (CryptoFav View)
-- [ ] Finish Favourite Crypto Screen (CryptoFav View)
+- [ ] Finish Favourite Crypto Screen (CryptoFavList View)
 - [x] Finish search feature (CryptoList View)

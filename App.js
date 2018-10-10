@@ -1,61 +1,93 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet,
   Text,
   View,
-  TextInput,
-  Button,
-  TouchableOpacity,
+  Image,
+  // Button,
+  // TouchableOpacity,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage,
  } from 'react-native';
  import _ from 'lodash'
-
 import { SearchBar, List, ListItem } from 'react-native-elements'
 import {createStackNavigator} from 'react-navigation'
+import RNShakeEvent from 'react-native-shake-event'
+
+const FAVORITEDBKEY = 'favorites';
 
 
 
-
-
-class CryptoItem extends Component {
+class CryptoFavList extends Component {
   static navigationOptions = {
-    title: 'Info'
+    title: 'Favourites'
+  }
+
+  state = {
+    favCryptoList:null
+  }
+
+  componentDidMount() {
+    this._getFavoritedCoins()
+    this._handleShakeEvent()
+  }
+
+  componentWillUnmount() {
+    RNShakeEvent.removeEventListener('shake');
+  }
+
+  _handleShakeEvent = () => {
+    RNShakeEvent.addEventListener('shake', () => {
+      this.props.navigation.navigate('Home')
+    })
+  }
+
+  async _getFavoritedCoins(){
+    const tempList = ['btc', 'xml', 'eth']
+    await AsyncStorage.setItem(FAVORITEDBKEY, JSON.stringify(tempList))
+    const favoritedCoinsJson = await AsyncStorage.getItem(FAVORITEDBKEY);
+    const favoriteData = await JSON.parse(favoritedCoinsJson);
+    await this.setState({favCryptoList: favoriteData });
   }
 
 
   render() {
-    const cryptoObj = this.props.navigation.getParam('cryptoObj')
-    return (
+    // when state.favCryptoList is ready, render the FlatList
+    return(
       <View>
-        {/* Crypto Obj data structure */}
-        {/* "id": 1,
-        "name": "Bitcoin",
-        "symbol": "BTC",
-        "website_slug": "bitcoin",
-        "rank": 1,
-        "circulating_supply": 17314525,
-        "total_supply": 17314525,
-        "max_supply": 21000000,
-        "quotes": {
-          "USD": {
-            "price": 6568.29741754,
-            "volume_24h": 3825153799.08662,
-            "market_cap": 113726949843,
-            "percent_change_1h": 0.11,
-            "percent_change_24h": -0.79,
-            "percent_change_7d": 1.16
-          }
-        },
-        "last_updated": 1539175942 */}
-        <Text>{cryptoObj.rank}</Text>
-        <Text>{cryptoObj.quotes.USD.price}</Text>
-
+        { this.state.favCryptoList ? <Text>{this.state.favCryptoList.join(' ')}</Text> : <Text>Loading</Text>}
       </View>
     )
   }
 }
 
+
+class CryptoItem extends Component {
+ static navigationOptions = {
+   title: 'Info'
+ }
+
+ render() {
+   const cryptoObj = this.props.navigation.getParam('cryptoObj')
+   const cryptoImg =  this.props.navigation.getParam('cryptoImg')
+   return (
+     <View style={styles.infoContainer}>
+       <View style={styles.infoContainer__items}>
+         <Image source={{uri: cryptoImg}} style={{width:74, height: 74}} />
+         <Text style={styles.infoContainer__title}>{cryptoObj.name}</Text>
+         <Text style={styles.infoContainer__price}>{cryptoObj.quotes.USD.price.toFixed(3)} $/{cryptoObj.symbol}</Text>
+         <Text style={styles.infoContainer__values}></Text>
+         <View>
+           <Text style={styles.valuesContainer__values}>Volume (24h): {cryptoObj.quotes.USD.volume_24h.toFixed(2)}</Text>
+           <Text style={styles.valuesContainer__values}>Market Cap: {Math.round(cryptoObj.quotes.USD.market_cap)} USD</Text>
+           <Text style={styles.valuesContainer__values}>Change (24h): {cryptoObj.quotes.USD.percent_change_24h}%</Text>
+           <Text style={styles.valuesContainer__values}>Change (7d): {cryptoObj.quotes.USD.percent_change_7d}%</Text>
+         </View>
+       </View>
+     </View>
+   )
+ }
+}
 
 
 class CryptoList extends Component {
@@ -63,18 +95,39 @@ class CryptoList extends Component {
     title: 'Home'
   }
 
-  componentDidMount() {
-   fetch('https://api.coinmarketcap.com/v2/ticker/')
-     .then(res => res.json())
-     .then(json => {
-       this.setState({apiOutput:_.values(json.data)});
-     })
 
-  }
   state = {
     filterSearch:[],
-    apiOutput:null
-  };
+    apiOutput:null,
+    isFavScreen:false,
+  }
+
+
+  componentDidMount() {
+    this._getAPI()
+    this._handleShakeEvent()
+  }
+
+
+  componentWillUnmount() {
+    RNShakeEvent.removeEventListener('shake');
+  }
+
+
+  _getAPI = () => {
+    fetch('https://api.coinmarketcap.com/v2/ticker/')
+      .then(res => res.json())
+      .then(json => {
+        this.setState({apiOutput:_.values(json.data)});
+      })
+  }
+
+  _handleShakeEvent = () => {
+    RNShakeEvent.addEventListener('shake', () => {
+      this.props.navigation.navigate('Favourites')
+    })
+  }
+
 
   _searchCrypto = (text) => {
     this.setState(prev => ({filterSearch:text, apiOutput: prev.apiOutput}))
@@ -86,7 +139,6 @@ class CryptoList extends Component {
     return <SearchBar
             round
             onChangeText={this._searchCrypto}
-            // onClearText={someMethod}
             placeholder='Type Here...' />
    }
 
@@ -99,7 +151,7 @@ class CryptoList extends Component {
         title={item.name}
         subtitle={item.symbol}
         avatar={{uri:url}}
-        onPress={() => this.props.navigation.navigate('CryptoDetails', { cryptoObj: item })}
+        onPress={() => this.props.navigation.navigate('CryptoDetails', { cryptoObj: item , cryptoImg: url})}
       />
     )
   }
@@ -148,6 +200,7 @@ export default createStackNavigator(
   {
     Home: CryptoList,
     CryptoDetails: CryptoItem,
+    Favourites: CryptoFavList
   },
   {
     initialRouteName: 'Home',
@@ -155,7 +208,6 @@ export default createStackNavigator(
 )
 
 
-// const styles = StyleSheet.create({
 const styles = {
   container: {
     flex:1,
@@ -165,8 +217,29 @@ const styles = {
     backgroundColor: 'rgb(19, 21, 25)',
     marginTop: 0,
   },
-
   loadingText: {
     fontSize: 40,
-  }
+  },
+  infoContainer: {
+   flex: 1,
+   backgroundColor: 'black',
+ },
+ infoContainer__items: {
+   alignItems: 'center',
+   padding: 20,
+   marginTop: 50,
+ },
+ infoContainer__title: {
+   color: 'white',
+   fontSize: 35,
+   marginTop: 5,
+ },
+ infoContainer__price: {
+   color: 'white',
+   fontSize: 20,
+ },
+ valuesContainer__values: {
+   color: 'white',
+   marginTop: 5,
+ },
 }
