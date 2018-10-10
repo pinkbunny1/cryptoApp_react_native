@@ -67,22 +67,25 @@ class CryptoList extends Component {
    fetch('https://api.coinmarketcap.com/v2/ticker/')
      .then(res => res.json())
      .then(json => {
-       this.setState({apiOutput:json.data});
+       this.setState({apiOutput:_.values(json.data)});
      })
 
   }
   state = {
-    inputText: "",
-    showText: "",
+    filterSearch:[],
     apiOutput:null
   };
+
+  _searchCrypto = (text) => {
+    this.setState(prev => ({filterSearch:text, apiOutput: prev.apiOutput}))
+  }
 
 
 
   _renderHeader = () => {
     return <SearchBar
             round
-            // onChangeText={someMethod}
+            onChangeText={this._searchCrypto}
             // onClearText={someMethod}
             placeholder='Type Here...' />
    }
@@ -102,7 +105,7 @@ class CryptoList extends Component {
   }
 
   _renderFooter = () => {
-     if (!this.state.apiOutput) return null;
+     if (!this.state.apiOutput || this.state.filterSearch.length > 0 ) return null;
 
     return (
       <View style={{ paddingVertical: 20 }}>
@@ -111,8 +114,13 @@ class CryptoList extends Component {
   }
 
   _renderFlatList = () => {
+    let filterList = this.state.apiOutput
+    if (this.state.filterSearch) {
+      filterList = filterList.filter(crypto => crypto.name.includes(this.state.filterSearch))
+    }
+
     return (<FlatList
-      data={_.values(this.state.apiOutput)}
+      data={filterList}
       keyExtractor={(item) => item.id.toString()}
       ListHeaderComponent={this._renderHeader}
       ListFooterComponent={this._renderFooter}
@@ -123,9 +131,11 @@ class CryptoList extends Component {
 
   render() {
     return (
+      <View style={styles.container}>
         <List containerStyle={styles.listStyle}>
           { this.state.apiOutput ? this._renderFlatList() : <Text style={styles.loadingText}>Loading...</Text> }
         </List>
+      </View>
 
     )
   }
@@ -147,12 +157,12 @@ export default createStackNavigator(
 
 // const styles = StyleSheet.create({
 const styles = {
-  random: {
+  container: {
     flex:1,
-
+    backgroundColor: 'rgb(19, 21, 25)',
   },
   listStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'rgb(19, 21, 25)',
     marginTop: 0,
   },
 
