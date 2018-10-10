@@ -16,11 +16,10 @@ react-native run-andriod (For Android)
 
 
 ## Take the `package.json` to update the dependencies and work on `App.js`
-- CryptoItem : Shows the detailed view of cruptocurrency. it has `cryptoObj` so no need to call API
+- CryptoItem : Shows the detailed view of cryptocurrency. it has `cryptoObj` so no need to call API
 - CryptoList : Shows LIST view of all cryptos
 
 ## App : Dark Themed
-<!-- ![App Home](images/appLook1.png) -->
 <img src="images/appLook1.png" width="300">
 
 
