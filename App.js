@@ -3,8 +3,7 @@ import {
   Text,
   View,
   Image,
-  // Button,
-  // TouchableOpacity,
+  Button,
   FlatList,
   ActivityIndicator,
   AsyncStorage,
@@ -16,7 +15,49 @@ import RNShakeEvent from 'react-native-shake-event'
 
 const FAVORITEDBKEY = 'favorites';
 
-
+const TEMPLIST = [
+   {
+    "id": 1,
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "website_slug": "bitcoin",
+    "rank": 1,
+    "circulating_supply": 17314850,
+    "total_supply": 17314850,
+    "max_supply": 21000000,
+    "quotes": {
+      "USD": {
+        "price": 6565.60024498,
+        "volume_24h": 3786353590.50935,
+        "market_cap": 113682383402,
+        "percent_change_1h": 0.03,
+        "percent_change_24h": -0.78,
+        "percent_change_7d": 1.03
+        }
+      },
+    "last_updated": 1539189565
+  },
+   {
+    "id": 2,
+    "name": "Litecoin",
+    "symbol": "LTC",
+    "website_slug": "litecoin",
+    "rank": 7,
+    "circulating_supply": 58663877,
+    "total_supply": 58663877,
+    "max_supply": 84000000,
+    "quotes": {
+      "USD": {
+        "price": 57.8002182643,
+        "volume_24h": 364114313.292333,
+        "market_cap": 3390784883,
+        "percent_change_1h": 0.33,
+        "percent_change_24h": -1.13,
+        "percent_change_7d": 0.31
+        }
+    },
+    "last_updated": 1539189602
+  }]
 
 class CryptoFavList extends Component {
   static navigationOptions = {
@@ -24,7 +65,8 @@ class CryptoFavList extends Component {
   }
 
   state = {
-    favCryptoList:null
+    favCryptoList:null,
+    filterFavSearch:[]
   }
 
   componentDidMount() {
@@ -42,21 +84,84 @@ class CryptoFavList extends Component {
     })
   }
 
-  async _getFavoritedCoins(){
-    const tempList = ['btc', 'xml', 'eth']
-    await AsyncStorage.setItem(FAVORITEDBKEY, JSON.stringify(tempList))
+
+  async _getFavoritedCoins() {
+    await AsyncStorage.setItem(FAVORITEDBKEY, JSON.stringify(TEMPLIST))
     const favoritedCoinsJson = await AsyncStorage.getItem(FAVORITEDBKEY);
     const favoriteData = await JSON.parse(favoritedCoinsJson);
     await this.setState({favCryptoList: favoriteData });
+    console.warn(this.state.favCryptoList)
   }
+
+
+  _searchFavCrypto = (text) => {
+    this.setState(prev => ({filterFavSearch:text, favCryptoList: prev.favCryptoList}))
+  }
+
+
+  _renderHeader = () => {
+    return <SearchBar
+            round
+            onChangeText={this._searchFavCrypto}
+            placeholder='Type Here...' />
+   }
+
+
+   _renderFavRow = ({ item }) => {
+     const url = `https://s2.coinmarketcap.com/static/img/coins/64x64/${item.id}.png`
+     return (
+       <ListItem
+         roundAvatar
+         title={item.name}
+         subtitle={item.symbol}
+         avatar={{uri:url}}
+         onPress={() => this.props.navigation.navigate('CryptoDetails', { cryptoObj: item , cryptoImg: url})}
+       />
+     )
+   }
+
+
+   _renderFooter = () => {
+      if (!this.state.favCryptoList || this.state.filterFavSearch.length > 0 ) return null;
+
+     return (
+       <View style={{ paddingVertical: 20 }}>
+         <ActivityIndicator animating size="large" />
+       </View> )
+   }
+
+
+   _renderFavList = () => {
+     let favFilterList = this.state.favCryptoList
+     if (this.state.filterSearch) {
+       favFilterList = favFilterList.filter(crypto => crypto.name.includes(this.state.filterSearch))
+     }
+
+     return (<FlatList
+       data={favFilterList}
+       keyExtractor={(item) => item.id.toString()}
+       ListHeaderComponent={this._renderHeader}
+       ListFooterComponent={this._renderFooter}
+       renderItem={this._renderFavRow}
+       >
+     </FlatList>)
+   }
 
 
   render() {
     // when state.favCryptoList is ready, render the FlatList
     return(
-      <View>
-        { this.state.favCryptoList ? <Text>{this.state.favCryptoList.join(' ')}</Text> : <Text>Loading</Text>}
+      <View style={styles.container}>
+        {/* { this.state.favCryptoList ? <Text>{this.state.favCryptoList.join(' ')}</Text> : <Text>Loading</Text>} */}
+
+        {/* <View style={styles.container}> */}
+          <List containerStyle={styles.listStyle}>
+            { this.state.favCryptoList ? this._renderFavList() : <Text style={styles.loadingText}>Loading...</Text> }
+          </List>
+        {/* </View> */}
       </View>
+
+
     )
   }
 }
@@ -142,11 +247,11 @@ class CryptoList extends Component {
             placeholder='Type Here...' />
    }
 
+
   _renderList = ({ item }) => {
     const url = `https://s2.coinmarketcap.com/static/img/coins/64x64/${item.id}.png`
     return (
       <ListItem
-        style={{backgroundColor:"black"}}
         roundAvatar
         title={item.name}
         subtitle={item.symbol}
