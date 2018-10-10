@@ -20,7 +20,8 @@ react-native run-andriod (For Android)
 - CryptoList : Shows LIST view of all cryptos
 
 ## App : Dark Themed
-![App Home](images/appLook1.png =50x)
+<!-- ![App Home](images/appLook1.png) -->
+<img src="images/appLook1.png" width="300">
 
 
 ## To Do:
