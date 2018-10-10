@@ -121,27 +121,16 @@ class CryptoFavList extends Component {
    }
 
 
-   _renderFooter = () => {
-      if (!this.state.favCryptoList || this.state.filterFavSearch.length > 0 ) return null;
-
-     return (
-       <View style={{ paddingVertical: 20 }}>
-         <ActivityIndicator animating size="large" />
-       </View> )
-   }
-
-
    _renderFavList = () => {
-     let favFilterList = this.state.favCryptoList
-     if (this.state.filterSearch) {
-       favFilterList = favFilterList.filter(crypto => crypto.name.includes(this.state.filterSearch))
+     let renderedList = this.state.favCryptoList
+     if (this.state.filterFavSearch) {
+       renderedList = renderedList.filter(crypto => crypto.name.includes(this.state.filterFavSearch))
      }
 
      return (<FlatList
-       data={favFilterList}
+       data={renderedList}
        keyExtractor={(item) => item.id.toString()}
        ListHeaderComponent={this._renderHeader}
-       ListFooterComponent={this._renderFooter}
        renderItem={this._renderFavRow}
        >
      </FlatList>)
@@ -152,13 +141,9 @@ class CryptoFavList extends Component {
     // when state.favCryptoList is ready, render the FlatList
     return(
       <View style={styles.container}>
-        {/* { this.state.favCryptoList ? <Text>{this.state.favCryptoList.join(' ')}</Text> : <Text>Loading</Text>} */}
-
-        {/* <View style={styles.container}> */}
           <List containerStyle={styles.listStyle}>
             { this.state.favCryptoList ? this._renderFavList() : <Text style={styles.loadingText}>Loading...</Text> }
           </List>
-        {/* </View> */}
       </View>
 
 
