@@ -17,14 +17,26 @@ react-native run-andriod (For Android)
 - Bundling Error : `react-native start --reset-cache`
 
 
-## Take the `package.json` to update the dependencies and work on `App.js`
-- CryptoItem : Shows the detailed view of cryptocurrency. it has `cryptoObj` so no need to call API
-- CryptoList : Shows LIST view of all cryptos
+
+## Working Features
+- Home Screen : Fetches and renders a list of cryptocurrencies from **API**
+- Favourite Screen : Fetches and renders a list of cryptocurrencies from **AsyncStorage**
+- Shake the phone to navigate to *Favourites* or *Home* screen
+- Add/removes cryptocurrency to Favourite List using the AsyncStorage
+
+
+
+## Components
+- CryptoList : Lists all cryptos from **API**
+- FavCryptoList : Lists of all cryptos in Favourite List from **AsyncStorage**
+- CryptoItem : Shows the detailed view of cryptocurrency such as *Prices*, *Price Changes*, add or remove from Favourite list
+
 
 
 ## App : Dark Themed
 <img src="images/appLook1.png" alt="HomeScreen" width="300">
 <img src="images/appLook2.png" alt="SearchScreen" width="300">
+
 
 
 ## To Do:
@@ -33,8 +45,15 @@ react-native run-andriod (For Android)
 - [x] Add Crypto Detailed Screen (CryptoItem View)
 - [x] Add Shake Feature (CryptoList View)
 - [x] Finish Crypto Detailed Screen (CryptoItem View)
-- [ ] Add Fav Button on Crypto Detailed Screen (CryptoItem View)
+- [x] Add Fav Button on Crypto Detailed Screen (CryptoItem View)
 - [x] Add Favourite Crypto Screen (CryptoFav View)
 - [x] Add Search on Favourite Crypto Screen (CryptoFav View)
 - [x] Finish Favourite Crypto Screen (CryptoFavList View)
 - [x] Finish search feature (CryptoList View)
+
+
+
+## Contributors
+- @pinkbunny1 (Jin Lee)
+- @ramu3000 (Rasmus Laine)
+- @MikaelTornwall (Mikael Törnwall)
