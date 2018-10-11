@@ -23,7 +23,7 @@ react-native run-andriod (For Android)
 - Favourite Screen : Fetches and renders a list of cryptocurrencies from **AsyncStorage**
 - Shake the phone to navigate to *Favourites* or *Home* screen
 - Add/removes cryptocurrency to Favourite List using the AsyncStorage
-
+- Search by the name of cryptocurrency
 
 
 ## Components
@@ -34,9 +34,14 @@ react-native run-andriod (For Android)
 
 
 ## App : Dark Themed
+Home Screen
 <img src="images/appLook1.png" alt="HomeScreen" width="300">
+
+Search Feature
 <img src="images/appLook2.png" alt="SearchScreen" width="300">
 
+Detailed Screen
+<img src="images/appLook3.png" alt="ItemScreen" width="300">
 
 
 ## To Do:

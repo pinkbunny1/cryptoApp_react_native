@@ -104,7 +104,7 @@ class CryptoList extends Component {
 
   _renderFlatList = () => {
     let filterList = this.state.apiOutput
-    if (this.state.filterSearch) {
+    if (this.state.filterSearch.length > 0) {
       filterList = filterList.filter(crypto => crypto.name.includes(this.state.filterSearch))
     }
 
@@ -132,8 +132,6 @@ class CryptoList extends Component {
 
 
 export default createStackNavigator(
-  // THIS IS THE CONFIG OBJECT
-  // [codename]: {screen: MyComponent}
   {
     Home: CryptoList,
     CryptoDetails: CryptoItem,
@@ -154,7 +152,10 @@ const styles = {
     marginTop: 0,
   },
   loadingText: {
+    marginTop: 100,
     fontSize: 40,
+    color: 'grey',
+    alignSelf: 'center'
   },
   infoContainer: {
    flex: 1,

@@ -18,7 +18,8 @@ export default class CryptoFavList extends Component {
 
   state = {
     favCryptoList:null,
-    filterFavSearch:[]
+    filterFavSearch:[],
+    isZeroFavList:false
   }
 
   componentDidMount() {
@@ -40,7 +41,7 @@ export default class CryptoFavList extends Component {
   async _getFavoritedCoins() {
     const favoritedCoinsJson = await AsyncStorage.getItem(FAVORITEDBKEY);
     const favoriteData = JSON.parse(favoritedCoinsJson);
-    this.setState({favCryptoList: favoriteData });
+    favoriteData.length == 0 ? this.setState({isZeroFavList: true}) : this.setState({favCryptoList: favoriteData })
   }
 
 
@@ -72,32 +73,34 @@ export default class CryptoFavList extends Component {
 
 
    _renderFavList = () => {
+     this._getFavoritedCoins()
      let renderedList = this.state.favCryptoList;
-    if( !(Array.isArray(renderedList)) ) {
-        return (<Text>Wrong format!</Text>)
-    }
+      if( !(Array.isArray(renderedList)) ) {
+          return (<Text>Wrong format!</Text>)
+      }
 
     if (this.state.filterFavSearch.length > 0) {
        renderedList = renderedList.filter(crypto => {
-           if(!(crypto.name)) {
-               console.warn(crypto)
-            return;
-            }
            return crypto.name.includes(this.state.filterFavSearch)
        })
      }
 
-     return (<FlatList
-       data={renderedList}
-       keyExtractor={(item) => item.id.toString()}
-       ListHeaderComponent={this._renderHeader}
-       renderItem={this._renderFavRow}
-       >
-     </FlatList>)
+     return (
+       <FlatList
+         data={renderedList}
+         keyExtractor={(item) => item.id.toString()}
+         ListHeaderComponent={this._renderHeader}
+         renderItem={this._renderFavRow}>
+       </FlatList>)
    }
 
 
   render() {
+
+    if (this.state.isZeroFavList) {
+      return  <Text style={styles.loadingText}>Nothing in the list...</Text>
+    }
+
     return(
       <View style={styles.container}>
           <List containerStyle={styles.listStyle}>
@@ -119,7 +122,10 @@ const styles = {
       marginTop: 0,
     },
     loadingText: {
+      marginTop: 100,
       fontSize: 40,
+      color: 'grey',
+      alignSelf: 'center'
     },
     infoContainer: {
      flex: 1,
