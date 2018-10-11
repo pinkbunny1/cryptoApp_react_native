@@ -50,6 +50,7 @@ react-native run-andriod (For Android)
 - [x] Add Search on Favourite Crypto Screen (CryptoFav View)
 - [x] Finish Favourite Crypto Screen (CryptoFavList View)
 - [x] Finish search feature (CryptoList View)
+- [x] Update FavList in state when unfollowed from FavListScreen (CryptoFav View)
 
 
 
