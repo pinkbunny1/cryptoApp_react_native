@@ -34,7 +34,7 @@ react-native run-andriod (For Android)
 
 
 ## App : Dark Themed
-*Home Screen*
+*Home Screen*<br>
 <img src="images/appLook1.png" alt="HomeScreen" width="300">
 
 *Search Feature*
